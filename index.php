@@ -9,3 +9,6 @@ $my_product = new Product();
 $status = $my_product->get();
 
 echo $status;
+
+
+
