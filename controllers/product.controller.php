@@ -58,17 +58,17 @@ class Product extends DBConnection
         }
 
 
-        //handle the file upload
-        // $file_upload_status = $this->handle_file($this->product_image);
+        // handle the file upload
+        $file_upload_status = $this->handle_file($this->product_image);
 
-        // if (!$file_upload_status) {
-        //     return $this->response(500, $file_upload_status);
-        // } else {
-        //     $file_upload_permanent_status = $this->upload_file_permanent();
-        //     if (!$file_upload_permanent_status) {
-        //         return $this->response(500, "could not upload file");
-        //     }
-        // }x
+        if (!$file_upload_status) {
+            return $this->response(500, $file_upload_status);
+        } else {
+            $file_upload_permanent_status = $this->upload_file_permanent();
+            if (!$file_upload_permanent_status) {
+                return $this->response(500, "could not upload file");
+            }
+        }
 
         $query->execute();
         return $this->response(200, "Product created successfully");
@@ -92,23 +92,22 @@ class Product extends DBConnection
         $query->execute();
 
         return $this->response(200, "product deleted successfully");
-      //  $query->close();
-      //  $this->conn->close();
+        $query->close();
+        $this->conn->close();
     }
 
     public function get()
     {
-        $query = $this->conn->prepare("SELECT * FROM products_table");
-        $query->execute();
+        $query = $this->conn->prepare("SELECT * FROM product_table");
         $query->bind_result($id, $product_name, $product_desc, $product_price, $product_image);
-
+        $query->execute();
         if (!$query) {
             return $this->response(500, "could not get products");
         }
 
-
+        $data_array = [];
         while ($query->fetch()) {
-            return $this->response(200, "products gotten successfully", [
+            array_push($data_array, [
                 "id" => $id,
                 "name" => $product_name,
                 "description" => $product_desc,
@@ -116,6 +115,7 @@ class Product extends DBConnection
                 "image_url" => $product_image
             ]);
         }
+        return $this->response(200, "products gotten successfully", $data_array);
 
         $query->close();
         $this->conn->close();
