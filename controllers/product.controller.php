@@ -1,11 +1,14 @@
 <?php
-require_once ("./../db/__init__.php") or die("couldn't load db configuration file");
+
+require_once("./../db/init.php");
+
+
 class Product extends DBConnection
 {
-    private $product_name;
-    private $product_description;
-    private $product_price;
-    private $product_image;
+    protected $product_name;
+    protected $product_description;
+    protected $product_price;
+    protected $product_image;
 
 
     public function __construct()
@@ -55,16 +58,16 @@ class Product extends DBConnection
         }
 
         //handle the file upload
-        $file_upload_status = $this->handle_file($this->product_image);
+        // $file_upload_status = $this->handle_file($this->product_image);
 
-        if (!$file_upload_status) {
-            return $this->response(500, $file_upload_status);
-        } else {
-            $file_upload_permanent_status = $this->upload_file_permanent();
-            if (!$file_upload_permanent_status) {
-                return $this->response(500, "could not upload file");
-            }
-        }
+        // if (!$file_upload_status) {
+        //     return $this->response(500, $file_upload_status);
+        // } else {
+        //     $file_upload_permanent_status = $this->upload_file_permanent();
+        //     if (!$file_upload_permanent_status) {
+        //         return $this->response(500, "could not upload file");
+        //     }
+        // }
 
         $query->execute();
         return $this->response(200, "Product created successfully");
