@@ -1,13 +1,13 @@
 <?php
-require_once("./../controllers/image-upload.controller.php");
+require_once("controllers/image-upload.controller.php");
 class DBConnection extends FileUploadHandler
 {
     protected $hostname = 'localhost';
-    protected $password = 'ea20gt05*(;A';
+    protected $password = '';
     protected $username = 'root';
     protected $database = 'product_app';
     
-    public $conn = "";
+    public $conn;
 
     public function __construct()
     {
