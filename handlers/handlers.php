@@ -1,5 +1,5 @@
 <?php
-require_once("./controllers/image-upload.controller.php");
+require_once("./controllers/product.controller.php");
 require_once("./routers/router.php");
 
 function handleCreate()
@@ -37,5 +37,3 @@ function handleDefaultRoute()
     echo "Hello world!";
     die();
 }
-
-?>

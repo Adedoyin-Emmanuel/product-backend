@@ -53,7 +53,7 @@ class Product extends DBConnection
             $query = $this->conn->prepare("INSERT INTO product_table (product_name, product_desc, product_price, product_img) VALUES (?, ?, ?, ?)");
             $query->bind_param("ssis", $this->product_name, $this->product_description, $this->product_price, $this->product_image);
         } catch (exception $e) {
-           // echo $e;
+            // echo $e;
             return $this->response(500, "Product creation failed!");
         }
 
