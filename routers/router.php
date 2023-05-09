@@ -1,63 +1,25 @@
 <?php
 
-class App
+class Router
 {
-
-    public function __construct()
+    public function route($method, $path, $handler)
     {
-    }
 
-    public function get($route_path, callable $callback)
-    {
-        if (!isset($route_path) or !isset($callback)) {
-            die("Route path or callback is required");
-        }
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $requestPath = $_SERVER['REQUEST_URI'];
 
-        if ($_SERVER['REQUEST_METHOD'] == "GET") {
-
-            if ($_SERVER["REQUEST_URI"]  == $route_path and $_SERVER["REQUEST_URI"] == "/all_products") {
-                echo $callback();
-                header("Content-Type: application/json");
+        /*Check if method and path match the requested route*/
+        if ($method === $requestMethod && preg_match("#^{$path}$#", $requestPath)) {
+            $routeParams = [];
+            preg_match_all("#\{([^\}]+)\}#", $path, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                $paramName = $match[1];
+                $paramValue = $_GET[$paramName] ?? null;
+                if ($paramValue !== null) {
+                    $routeParams[$paramName] = $paramValue;
+                }
             }
-        }
-    }
-
-    public function post($route_path, callable $callback)
-    {
-        if (!isset($route_path) or !isset($callback)) {
-            die("Route path or callback is required");
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-            if ($_SERVER["REQUEST_URI"]  == $route_path and $_SERVER["REQUEST_URI"] == "/add_product") {
-            
-                $product_name = $_POST["product_name"];
-                $product_desc = $_POST["product_desc"];
-                $product_img = $_POST["product_img"];
-                $product_price = $_POST["product_price"];
-                
-                echo $callback($product_name, $product_desc, $product_img, $product_price);
-                header("Content-Type: application/json");
-            }
-        }
-    }
-
-
-
-    public function delete($route_path, callable $callback)
-    {
-        if (!isset($route_path) or !isset($callback)) {
-            die("Route path or callback is required");
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-            if ($_SERVER["REQUEST_URI"]  == $route_path and $_SERVER["REQUEST_URI"] == "/delete") {
-                $prams = $_POST["id"];
-                echo $callback($prams);
-                header("Content-Type: application/json");
-            }
+            $handler($routeParams);
         }
     }
 }
