@@ -31,4 +31,11 @@ function handleProductDelete($route_params)
     die();
 }
 
+
+function handleDefaultRoute()
+{
+    echo "Hello world!";
+    die();
+}
+
 ?>
