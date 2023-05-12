@@ -1,5 +1,4 @@
 <?php
-
 class Router
 {
     public function route($method, $path, $handler)
